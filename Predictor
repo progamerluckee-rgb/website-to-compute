@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator Predictor</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #111;
+      color: #eee;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+    input {
+      width: 80px;
+      text-align: center;
+    }
+    button {
+      background: #00b894;
+      color: white;
+      cursor: pointer;
+    }
+    #history {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .multi {
+      background: #222;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    #prediction {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      background: #2d3436;
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎯 Aviator Predictor</h2>
+  <div id="history"></div>
+  <input type="number" step="0.01" id="multiplierInput" placeholder="e.g. 2.15" />
+  <button onclick="addMultiplier()">Add</button>
+  <button onclick="predict()">Predict Next</button>
+  <div id="prediction">Prediction: --</div>  <script>
+    let history = [];
+
+    function addMultiplier() {
+      const val = parseFloat(document.getElementById('multiplierInput').value);
+      if (!isNaN(val)) {
+        history.unshift(val);
+        if (history.length > 20) history.pop();
+        renderHistory();
+        document.getElementById('multiplierInput').value = '';
+      }
+    }
+
+    function renderHistory() {
+      const div = document.getElementById('history');
+      div.innerHTML = '';
+      history.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'multi';
+        el.innerText = `${m}x`;
+        div.appendChild(el);
+      });
+    }
+
+    function predict() {
+      if (history.length === 0) return;
+      const avg = (history.reduce((a, b) => a + b, 0)) / history.length;
+      const rounded = avg.toFixed(2);
+      document.getElementById('prediction').innerText = `Prediction: ~${rounded}x`;
+    }
+  </script></body>
+</html>
